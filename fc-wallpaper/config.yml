@@ -1,0 +1,11 @@
+proxy.host: proxy host
+proxy.port: proxy port
+proxy.user: proxy user
+proxy.pass: proxy pass
+
+angeleyes.id: Your FC ID
+angeleyes.pass: Your FC password
+
+save.dir: C:\\directory\\saving\\image
+# It can use ruby expression
+#save.dir: <%= "C:\\#{Time.now.year}"%>
