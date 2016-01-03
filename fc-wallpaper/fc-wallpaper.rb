@@ -4,6 +4,7 @@ require 'json'
 require 'mechanize'
 require 'erb'
 require 'yaml'
+require 'dropbox_sdk'
 
 def save_wallpaper
   # Mechanize 設定
@@ -24,16 +25,24 @@ def save_wallpaper
   LOGGER.info 'Saving FC wallpaper'
   # 1024x768 の画像保存
   image_size_m = fc_top_page.link_with(text: /\A1280.?768\z/).click
-  image_size_m.save!("#{CONFIG['save.dir']}/#{image_size_m.filename}")
+  save_to_dropbox(image_size_m)
 
   # 1920x1080 の画層保存
   image_size_l = fc_top_page.link_with(text: /\A1280.?1024\z/).click
-  image_size_l.save!("#{CONFIG['save.dir']}/#{image_size_l.filename}")
+  save_to_dropbox(image_size_l)
 
   # 壁紙に設定する画像のパスを返却
   return "#{CONFIG['save.dir']}#{get_separator}#{image_size_l.filename}"
 ensure
   agent.shutdown
+end
+
+def save_to_dropbox image
+  tempfilepath = "#{CONFIG['save.dir']}/#{image.filename}"
+  image.save!(tempfilepath)
+
+  client = DropboxClient.new(CONFIG['dropbox.app.token'])
+  response = client.put_file("#{CONFIG['dropbox.dir']}/#{image.filename}", open(tempfilepath))
 end
 
 def get_separator
