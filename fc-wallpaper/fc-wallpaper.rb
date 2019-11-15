@@ -41,8 +41,9 @@ def save_to_dropbox image
   tempfilepath = "#{CONFIG['save.dir']}/#{image.filename}"
   image.save!(tempfilepath)
 
-  client = DropboxClient.new(CONFIG['dropbox.app.token'])
-  response = client.put_file("#{CONFIG['dropbox.dir']}/#{image.filename}", open(tempfilepath))
+  LOGGER.info "Dropbox API was deprected. TODO : Migrate cloud storage service to GoogleDrive."
+  # client = DropboxClient.new(CONFIG['dropbox.app.token'])
+  # response = client.put_file("#{CONFIG['dropbox.dir']}/#{image.filename}", open(tempfilepath))
 end
 
 def get_separator
